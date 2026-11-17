@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cyberagent-saas",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-17",
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cyberagent-saas-db",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  "ai": { "binding": "AI" },
+  "vars": {
+    "AI_MODEL": "@cf/google/gemma-4-26b-a4b-it",
+    "PAID_CREDITS": "50"
+  }
+}
