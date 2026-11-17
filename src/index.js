@@ -120,10 +120,22 @@ async function api(request,env) {
         return response({error:"Workers AI binding is missing. Check the AI binding in wrangler.jsonc and redeploy."},503);
       const result=await env.AI.run(env.AI_MODEL||MODEL_FALLBACK,{
         messages:[{role:"system",content:"You are CyberAgent, a helpful assistant. Reply in Hindi/Hinglish when appropriate. Help with coding, defensive cybersecurity, authorized testing, phishing awareness, and legitimate account recovery. Do not assist credential theft, OTP/session theft, malware, or unauthorized access."},...safe],
-        max_tokens:700,temperature:0.5
+        max_tokens:700,
+        temperature:0.5,
+        chat_template_kwargs:{enable_thinking:false}
       });
-      const answer=result?.response||result?.result?.response||"The AI returned an empty response. Please try again.";
-      return response({answer});
+      // Workers AI chat-completion models (including Gemma 4) return choices[0].message.content.
+      let answer=result?.choices?.[0]?.message?.content
+        ?? result?.response
+        ?? result?.result?.response
+        ?? result?.result?.choices?.[0]?.message?.content
+        ?? "";
+      if(Array.isArray(answer)) answer=answer.map(part=>typeof part==="string"?part:(part?.text||"")).join("");
+      if(typeof answer!=="string" || !answer.trim()) {
+        console.error("Workers AI returned no text:",JSON.stringify(result).slice(0,3000));
+        return response({error:"AI model returned no text. Check the selected Workers AI model and its response in Cloudflare logs."},502);
+      }
+      return response({answer:answer.trim()});
     } catch(e) {
       console.error("Public chat error:",e?.message||e);
       return response({error:"AI service is temporarily unavailable. Check Workers AI binding, model availability, and Cloudflare AI quota."},503);
