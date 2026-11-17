@@ -111,8 +111,8 @@ async function api(request,env) {
     const b=await jsonBody(request,4000);
     if(!b || typeof b.email!=="string" || typeof b.password!=="string") return response({error:"Email and password required."},400);
     const email=b.email.trim().toLowerCase();
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^\d{6}$/.test(b.password))
-      return response({error:"Valid email and password (10–128 characters) required."},400);
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || b.password.length!==6)
+      return response({error:"Valid email and exactly 6 characters password required."},400);
     const id=randomId(16), salt=randomId(16), hash=await passwordHash(b.password,salt);
     let role="user";
     if(env.OWNER_SETUP_TOKEN && typeof b.ownerSetupCode==="string" && equal(b.ownerSetupCode,env.OWNER_SETUP_TOKEN)) {
