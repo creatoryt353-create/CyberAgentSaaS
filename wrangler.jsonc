@@ -3,10 +3,7 @@
   "name": "cyberagentsaas",
   "main": "src/index.js",
   "compatibility_date": "2026-11-17",
-  "assets": {
-    "directory": "./public",
-    "binding": "ASSETS"
-  },
+  "assets": { "directory": "./public", "binding": "ASSETS" },
   "d1_databases": [
     {
       "binding": "DB",
@@ -14,9 +11,7 @@
       "database_id": "85a26109-de5c-418a-b0fc-08498c56e2df"
     }
   ],
-  "ai": {
-    "binding": "AI"
-  },
+  "ai": { "binding": "AI" },
   "vars": {
     "AI_MODEL": "@cf/google/gemma-4-26b-a4b-it",
     "PAID_CREDITS": "50"
