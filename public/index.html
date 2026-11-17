@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d19"><title>CyberAgent SaaS</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#080d19;--panel:#111a2b;--line:#26344c;--muted:#9aa9c2;--blue:#6ea8fe}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0,#1b3155 0,transparent 34%),var(--bg);color:#edf3ff;font:15px system-ui,Arial}
+.wrap{max-width:1050px;margin:auto;padding:20px 14px 45px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#2763b7,#8b5cf6);display:grid;place-items:center;font-size:22px}h1{font-size:20px;margin:0}.muted{color:var(--muted);font-size:12px;line-height:1.5}.card{background:rgba(17,26,43,.95);border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:13px}
+input,textarea,button{font:inherit}input,textarea{width:100%;background:#0a1221;color:#edf3ff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:5px 0 12px}button{border:0;border-radius:10px;background:linear-gradient(135deg,#3478df,#7056d9);color:white;padding:11px 15px;font-weight:650;cursor:pointer}button.secondary{background:#293a56}button.danger{background:#8b3448}button:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row{display:flex;gap:8px}.row>*{flex:1}.hidden{display:none!important}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.tabs button{background:#24344f}.tabs button.active{background:#3478df}
+.chat{height:390px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:8px 0}.msg{max-width:90%;padding:11px 13px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.user{align-self:flex-end;background:#214a82}.bot{align-self:flex-start;background:#1a2940;border:1px solid #2c3b55}
+textarea{resize:vertical;min-height:54px}.stat{font-size:23px;font-weight:750}.status{min-height:18px;color:var(--muted);font-size:12px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{color:#b6c7e2}
+.price{font-size:29px;font-weight:800}.pill{border:1px solid #395172;padding:5px 9px;border-radius:99px;font-size:11px;color:#b9d5ff}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.row{flex-direction:column}.msg{max-width:98%}table{font-size:11px}}
+</style></head><body><div class="wrap">
+<header class="top"><div class="brand"><div class="logo">⌁</div><div><h1>CyberAgent SaaS</h1><div class="muted">AI assistant · Coding · Defensive cybersecurity</div></div></div><span class="pill">₹49 CREDIT PACK</span></header>
+
+<section id="auth" class="grid">
+ <div class="card"><h2>Login</h2><label class="muted">Email</label><input id="liEmail" type="email" autocomplete="email"><label class="muted">Password</label><input id="liPass" type="password" autocomplete="current-password"><button id="loginBtn">Login</button><div id="liStatus" class="status"></div></div>
+ <div class="card"><h2>Create account</h2><label class="muted">Email</label><input id="suEmail" type="email" autocomplete="email"><label class="muted">Password (minimum 10 characters)</label><input id="suPass" type="password" autocomplete="new-password"><label class="muted">Owner setup code (only for first admin account)</label><input id="ownerCode" type="password" placeholder="Leave blank for normal user"><button id="signupBtn">Create account</button><div id="suStatus" class="status"></div></div>
+</section>
+
+<main id="dashboard" class="hidden">
+ <div class="card row" style="align-items:center;justify-content:space-between"><div><b id="who"></b><div id="role" class="muted"></div></div><button class="secondary" id="logout">Logout</button></div>
+ <nav class="tabs"><button class="active" data-tab="chatTab">AI Chat</button><button data-tab="plansTab">Plans & Credits</button><button id="adminTabBtn" data-tab="adminTab" class="hidden">Admin Dashboard</button></nav>
+ <section id="chatTab" class="tab">
+  <div class="card"><div class="row"><div><b>CyberAgent AI</b><div id="balance" class="muted"></div></div><span class="pill">Cloud AI</span></div>
+   <div id="chat" class="chat"><div class="msg bot">Namaste! Hinglish mein coding, defensive cybersecurity aur authorized security testing ke sawaal poochho.</div></div>
+   <textarea id="prompt" maxlength="3000" placeholder="Message likho..."></textarea><button id="send">Send message</button><div id="chatStatus" class="status"></div>
+  </div>
+ </section>
+ <section id="plansTab" class="tab hidden"><div class="grid">
+  <div class="card"><h3>Free trial</h3><div class="price">₹0</div><p class="muted">Signup par 10 free AI messages.</p></div>
+  <div class="card"><h3>Starter credit pack</h3><div class="price">₹49</div><p class="muted"><b id="packCredits">50</b> AI message credits. One-time purchase, recurring subscription nahi.</p><button id="buy">Buy ₹49 credits</button><div id="payStatus" class="status"></div></div>
+ </div><p class="muted">Credits are added only after server-side payment verification. Payment provider charges and AI capacity limits apply.</p></section>
+ <section id="adminTab" class="tab hidden">
+  <div class="grid">
+   <div class="card"><div class="muted">Total users</div><div class="stat" id="stUsers">—</div></div>
+   <div class="card"><div class="muted">Paid revenue</div><div class="stat" id="stRevenue">—</div></div>
+   <div class="card"><div class="muted">Free messages remaining</div><div class="stat" id="stFree">—</div></div>
+   <div class="card"><div class="muted">Paid credits remaining</div><div class="stat" id="stPaid">—</div></div>
+  </div>
+  <div class="card"><h3>Users</h3><div style="overflow:auto"><table><thead><tr><th>Email</th><th>Role</th><th>Free</th><th>Paid</th><th>Status</th><th>Actions</th></tr></thead><tbody id="usersRows"></tbody></table></div></div>
+  <div class="card"><h3>Recent orders</h3><div style="overflow:auto"><table><thead><tr><th>Email</th><th>Amount</th><th>Credits</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersRows"></tbody></table></div></div>
+ </section>
+</main>
+<footer class="muted" style="text-align:center;margin-top:20px">Never paste passwords, OTPs, session cookies or API keys into AI chat. Defensive learning and authorized testing only.</footer>
+</div>
+<script>
+let me=null, history=[];
+const $=id=>document.getElementById(id);
+async function api(path,body){
+ const r=await fetch(path,{method:body===undefined?"GET":"POST",credentials:"same-origin",headers:body===undefined?{}:{"content-type":"application/json"},body:body===undefined?undefined:JSON.stringify(body)});
+ const d=await r.json().catch(()=>({error:"Server response invalid"}));if(!r.ok)throw new Error(d.error||"Request failed");return d;
+}
+function setStatus(id,msg){$(id).textContent=msg}
+function show(){
+ $("auth").classList.add("hidden");$("dashboard").classList.remove("hidden");
+ $("who").textContent=me.email;$("role").textContent=me.role==="admin"?"Owner / Admin":"Member";
+ $("adminTabBtn").classList.toggle("hidden",me.role!=="admin");
+ $("buy").disabled=me.role==="admin";$("balance").textContent=me.role==="admin"?"Owner free access":`${me.free_remaining} free · ${me.paid_credits} paid credits`;
+}
+function addMsg(t,role){const e=document.createElement("div");e.className="msg "+(role==="user"?"user":"bot");e.textContent=t;$("chat").appendChild(e);$("chat").scrollTop=$("chat").scrollHeight;return e}
+async function refresh(){const d=await api("/api/me");me=d.user;if(me)show();else{$("dashboard").classList.add("hidden");$("auth").classList.remove("hidden")}}
+$("signupBtn").onclick=async()=>{try{const d=await api("/api/register",{email:$("suEmail").value,password:$("suPass").value,ownerSetupCode:$("ownerCode").value});me=d.user;show();setStatus("suStatus","Account created.");}catch(e){setStatus("suStatus",e.message)}};
+$("loginBtn").onclick=async()=>{try{const d=await api("/api/login",{email:$("liEmail").value,password:$("liPass").value});me=d.user;show();setStatus("liStatus","Logged in.");}catch(e){setStatus("liStatus",e.message)}};
+$("logout").onclick=async()=>{await api("/api/logout",{});me=null;history=[];await refresh()};
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".tab").forEach(x=>x.classList.add("hidden"));$(b.dataset.tab).classList.remove("hidden");if(b.dataset.tab==="adminTab")loadAdmin()});
+$("send").onclick=async()=>{const message=$("prompt").value.trim();if(!message)return;$("prompt").value="";addMsg(message,"user");$("send").disabled=true;setStatus("chatStatus","AI is thinking…");const pending=addMsg("Thinking…","bot");
+ try{const d=await api("/api/chat",{message,history});pending.textContent=d.answer;history.push({role:"user",content:message},{role:"assistant",content:d.answer});history=history.slice(-8);if(me.role!=="admin"){me.free_remaining=d.free_remaining;me.paid_credits=d.paid_credits;$("balance").textContent=`${me.free_remaining} free · ${me.paid_credits} paid credits`;}setStatus("chatStatus",d.charged==="none"?"Owner access — no credits deducted.":`1 ${d.charged} message used.`);}
+ catch(e){pending.textContent=e.message;setStatus("chatStatus",e.message);}finally{$("send").disabled=false}};
+$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("send").click()}});
+$("buy").onclick=async()=>{try{
+ const cfg=await api("/api/config");if(!cfg.razorpayKeyId)throw new Error("Payment gateway is not configured by owner yet.");
+ const order=await api("/api/create-order",{});
+ const options={key:order.keyId,amount:order.amount,currency:"INR",name:"CyberAgent",description:`₹49 for ${order.credits} AI credits`,order_id:order.orderId,
+ handler:async function(res){try{const v=await api("/api/verify-payment",res);me= (await api("/api/me")).user;$("balance").textContent=`${me.free_remaining} free · ${me.paid_credits} paid credits`;setStatus("payStatus","Payment verified. Credits added!");}catch(e){setStatus("payStatus",e.message)}},
+ modal:{ondismiss:()=>setStatus("payStatus","Payment window closed.")}};
+ new Razorpay(options).open();setStatus("payStatus","Opening secure Razorpay checkout…");
+ }catch(e){setStatus("payStatus",e.message)}};
+async function loadAdmin(){try{const d=await api("/api/admin/summary");$("stUsers").textContent=d.stats.users||0;$("stRevenue").textContent="₹"+((d.revenue_paise||0)/100).toFixed(2);$("stFree").textContent=d.stats.free_messages_left||0;$("stPaid").textContent=d.stats.paid_credits_left||0;
+ $("usersRows").innerHTML=d.users.map(u=>`<tr><td>${esc(u.email)}</td><td>${u.role}</td><td>${u.free_remaining}</td><td>${u.paid_credits}</td><td>${u.disabled?"Disabled":"Active"}</td><td>${u.role==="admin"?"Owner":`<button data-act="${u.disabled?"enable":"disable"}" data-id="${u.id}" class="secondary">${u.disabled?"Enable":"Disable"}</button> <button data-act="add_credits" data-id="${u.id}" class="secondary">+10 credits</button>`}</td></tr>`).join("");
+ $("ordersRows").innerHTML=d.orders.map(o=>`<tr><td>${esc(o.email)}</td><td>₹${(o.amount/100).toFixed(2)}</td><td>${o.credits}</td><td>${o.status}</td><td>${esc(o.created_at)}</td></tr>`).join("");
+ document.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{let body={action:b.dataset.act,userId:b.dataset.id};if(body.action==="add_credits")body.credits=10;try{await api("/api/admin/user",body);loadAdmin()}catch(e){alert(e.message)}});
+ }catch(e){alert(e.message)}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+refresh().catch(()=>{});
+</script></body></html>
