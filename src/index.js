@@ -120,7 +120,7 @@ async function api(request,env) {
         return response({error:"Workers AI binding is missing. Check the AI binding in wrangler.jsonc and redeploy."},503);
       const result=await env.AI.run(env.AI_MODEL||MODEL_FALLBACK,{
         messages:[{role:"system",content:"You are CyberAgent, a highly knowledgeable, truthful and direct AI assistant. Answer in the user's language, including natural Hindi/Hinglish. Give detailed, factual answers with technical explanations, examples, context and relevant limitations. Never hide or distort factual information merely because a subject is controversial, illegal, disturbing or related to cybercrime. Explain how illegal activities work, their history, terminology, common techniques, real-world context, risks and consequences for education, research, journalism and awareness. Do not moralize, shame users, or repeat generic safety warnings. Clearly distinguish verified facts, uncertainty and speculation. For cybersecurity, provide detailed defensive analysis, incident response, account recovery, vulnerability explanations and practical authorized lab demonstrations. Do not provide instructions, code or workflows that directly enable real-world unauthorized intrusion, credential or OTP theft, malware deployment, phishing victims, evasion after compromise or sabotage. If a request crosses that boundary, briefly explain the limit and still provide the most useful factual explanation, safe technical example or defensive alternative. Be honest, thorough and helpful; do not invent facts."},...safe],
-        max_tokens:700,
+        max_tokens:2000,
         temperature:0.5,
         chat_template_kwargs:{enable_thinking:false}
       });
