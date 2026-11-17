@@ -8,9 +8,7 @@
     {
       "binding": "DB",
       "database_name": "cyberagent-saas-db",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
-    }
-  ],
+      "database_id": "85a26109-de5c-418a-b0fc-08498c56e2df"  ],
   "ai": { "binding": "AI" },
   "vars": {
     "AI_MODEL": "@cf/google/gemma-4-26b-a4b-it",
